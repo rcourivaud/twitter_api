@@ -3,7 +3,7 @@
 ## Installation 
 
 ```bazaar
-pip install git+
+pip install git+https://github.com/rcourivaud/twitter_api
 ```
 
 ## Usage

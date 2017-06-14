@@ -1,3 +1,6 @@
+from twitter_api.meta_extractor import HistExtractor
+
+
 class TwitterUser:
     def __init__(self, twitter_user):
 
@@ -8,6 +11,8 @@ class TwitterUser:
                                   "created_date", "user_name",
                                   "status_count"]}
         self._parse_user(twitter_user=twitter_user)
+
+        self.histgram_extractor = HistExtractor()
 
     def _parse_user(self, twitter_user):
         self.description = twitter_user.description
@@ -41,7 +46,12 @@ class TwitterUser:
             "status_count": self.status_count,
             "status": self.status,
             "all_text": " ".join([elt["text"] for elt in self.status])
+
         }
+        result_dict["histogram"] = self.histgram_extractor.get_histogram_from_string(result_dict["full_text"])
+        result_dict["twentywords"] = [k for k, v in sorted(result_dict["histogram"].items(),
+                                                           key=lambda x: x[1], reverse=True)][0:20]
+
         if not db:
             return result_dict
         else:

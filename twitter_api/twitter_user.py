@@ -1,7 +1,7 @@
 class TwitterUser:
     def __init__(self, twitter_user):
 
-        self.db_cols = {"mongo": ["status", 'twitter_id'],
+        self.db_cols = {"mongo": ["status", 'twitter_id', "all_text"],
                         "mysql": ["description", "profile_img",
                                   "followers", "location",
                                   "twitter_id", "friends",
@@ -39,10 +39,10 @@ class TwitterUser:
             "created_date": self.created_date,
             "user_name": self.user_name,
             "status_count": self.status_count,
-            "status": self.status
+            "status": self.status,
+            "all_text": " ".join([elt["text"] for elt in self.status])
         }
         if not db:
             return result_dict
         else:
             return {k: v for k, v in result_dict.items() if k in self.db_cols[db]}
-
